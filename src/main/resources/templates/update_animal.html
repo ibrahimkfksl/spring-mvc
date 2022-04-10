@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Animal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+
+<!-- create navigation bar ( header) -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<br>
+<br>
+
+
+<div class="container">
+    <h2>Update Animal</h2>
+
+    <form action="#" th:action="@{/saveAnimal}" th:object="${animal}" method="POST">
+
+        <input type="hidden" th:field="*{id}">
+
+        <label for="name">Animal Name</label>
+        <input type="text" id="name" th:field="*{name}" placeholder="Animal Name" class="form-control mb-4 col-4">
+
+        <label for="type">Animal Type</label>
+        <input type="text" id="type" th:field="*{type}" placeholder="Animal type [BIRD, DOG, CAT, FISH]" class="form-control mb-4 col-4">
+
+        <label for="age">Animal Age</label>
+        <input type="number" max="30" min="0" id="age" th:field="*{age}" placeholder="Animal age" class="form-control mb-4 col-4">
+
+        <label for="description">Animal Description</label>
+        <input type="text" id="description" th:field="*{description}" placeholder="Animal Description" class="form-control mb-4 col-4">
+
+        <button type="submit" class="btn btn-info col-2">Update Animal</button>
+    </form>
+
+    <hr>
+
+    <a th:href="@{/}">Back to Animal List</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Main Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+
+    <!-- create navigation bar ( header) -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <br>
+    <br>
+  <div class="container">
+        <br>
+        <h1>Welcome <span sec:authentication="principal.username"></span></h1> <!-- bu ozelligi kullanabilmek icin thyemealef security yi ekledik-->
+        <h1>Roles: <span sec:authentication="principal.authorities"></span></h1>
+        <h1>Your Animals</h1>
+        <a th:href="@{/showNewAnimalForm}" class="btn btn-primary btn-sm mb-3"> Add Animal </a>
+        <table border="1" class = "table table-striped table-responsive-md">
+            <thead>
+            <tr>
+                <th>Animal Name</th>
+                <th>Animal Type</th>
+                <th>Animal Age</th>
+                <th>Animal Description</th>
+                <th>Update Animal</th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')">Delete Animal</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="animal : ${listAnimals}">
+                <td th:text="${animal.getName()}"></td>
+                <td th:text="${animal.getType()}"></td>
+                <td th:text="${animal.getAge()}"></td>
+                <td th:text="${animal.getDescription()}"></td>
+                <td><a th:href="@{/showUpdateAnimalForm/{id}(id=${animal.getId()})}" class="btn btn-primary">Update</a></td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/deleteAnimal/{id}(id=${animal.getId()})}" class="btn btn-primary" >Delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+  </div>
+</body>
+</html>
