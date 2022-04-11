@@ -25,7 +25,8 @@
         <br>
         <h1>Welcome <span sec:authentication="principal.username"></span></h1> <!-- bu ozelligi kullanabilmek icin thyemealef security yi ekledik-->
         <h1>Roles: <span sec:authentication="principal.authorities"></span></h1>
-        <h1>Your Animals</h1>
+        <h1 th:if="${role == 'user'}">Your Animals</h1>
+        <h1 th:if="${role == 'admin'}">All Animals</h1>
         <a th:href="@{/showNewAnimalForm}" class="btn btn-primary btn-sm mb-3"> Add Animal </a>
         <table border="1" class = "table table-striped table-responsive-md">
             <thead>

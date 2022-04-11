@@ -6,7 +6,6 @@ import com.ozguryazilim.springmvc.repository.RoleRepository;
 import com.ozguryazilim.springmvc.repository.UserRepository;
 import com.ozguryazilim.springmvc.service.UserService;
 import com.ozguryazilim.springmvc.web.dto.UserRegistrationDto;
-import com.sun.tools.javac.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,6 +51,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByUsername(String username) {
         return userRepository.findByEmail(username);
+    }
+
+    @Override
+    public boolean isAdmin(org.springframework.security.core.userdetails.User user) {
+        List<Object> authorities = Arrays.asList(user.getAuthorities().stream().toArray());
+        for(Object authority: authorities){
+            if(authority.equals("ROLE_ADMIN")){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

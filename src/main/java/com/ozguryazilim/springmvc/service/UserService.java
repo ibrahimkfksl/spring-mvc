@@ -11,4 +11,6 @@ public interface UserService extends UserDetailsService {
     Long getUserIdByUsername(String username);
 
     User getUserByUsername(String toString);
+
+    boolean isAdmin(org.springframework.security.core.userdetails.User user);
 }
