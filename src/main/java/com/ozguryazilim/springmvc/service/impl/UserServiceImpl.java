@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
     public boolean isAdmin(org.springframework.security.core.userdetails.User user) {
         List<Object> authorities = Arrays.asList(user.getAuthorities().stream().toArray());
         for(Object authority: authorities){
-            if(authority.equals("ROLE_ADMIN")){
+            if(authority.toString().equals("ROLE_ADMIN")){
                 return true;
             }
         }

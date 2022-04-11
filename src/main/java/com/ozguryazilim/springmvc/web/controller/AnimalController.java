@@ -41,7 +41,6 @@ public class AnimalController {
     }
 
     @GetMapping("/deleteAnimal/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String deleteAnimal(@PathVariable(value = "id") long id){
         animalService.deleteAnimalById(id);
         return "redirect:/";

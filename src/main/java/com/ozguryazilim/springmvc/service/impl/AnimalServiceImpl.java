@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
@@ -23,20 +24,14 @@ public class AnimalServiceImpl implements AnimalService {
     private final RedisTemplate<String, Animal> redisTemplate;
 
     @Override
+    @Transactional
     public List<Animal> getAnimalsByUserPrincipal(String username) {
         Long id = userService.getUserIdByUsername(username);
-        List<Animal> cacheAnimal = redisTemplate.opsForList().range("mvc:user:animals:"+id, 0, -1);
-        if(cacheAnimal.size() == 0){
-            List<Animal> animals = animalRepository.getAnimalsByOwnerId(id);
-            if(animals.isEmpty()){
+        List<Animal> animals = animalRepository.getAnimalsByOwnerId(id);
+        if(animals.isEmpty()){
                 return null;
-            }else{
-                redisTemplate.opsForList().rightPushAll("mvc:user:animals:"+id, animals);
-                redisTemplate.expire("mvc:user:animals:"+id, Duration.ofSeconds(60));
-                return animals;
-            }
         }
-        return cacheAnimal;
+        return animals;
     }
 
     @Override
@@ -46,19 +41,14 @@ public class AnimalServiceImpl implements AnimalService {
 
     @Override
     public Animal getAnimalById(Long id) {
-        Animal cacheAnimal = redisTemplate.opsForValue().get("mvc:animal");
-        if(cacheAnimal == null){
-            Optional<Animal> optional = animalRepository.findById(id);
-            if(optional.isPresent()){
-                Animal animal = optional.get();
-                redisTemplate.opsForValue().set("mvc:animal",animal,Duration.ofSeconds(30));
-                return animal;
-            }
-            else{
-                throw new RuntimeException("Animal Not Found For Id::"+id);
-            }
+        Optional<Animal> optional = animalRepository.findById(id);
+        if(optional.isPresent()){
+            Animal animal = optional.get();
+            return animal;
         }
-       return cacheAnimal;
+        else{
+            throw new RuntimeException("Animal Not Found For Id::"+id);
+        }
     }
 
     @Override
@@ -68,13 +58,6 @@ public class AnimalServiceImpl implements AnimalService {
 
     @Override
     public List<Animal> findAllAnimals() {
-         List<Animal> cahceAnimal =  redisTemplate.opsForList().range("mvc:animals",0,-1);
-        if (cahceAnimal.size() == 0){
-            List<Animal> animals = animalRepository.findAll();
-            redisTemplate.opsForList().rightPushAll("mvc:animals", animals);
-            redisTemplate.expire("mvc:animals", Duration.ofSeconds(60));
-            return animals;
-        }
-        return cahceAnimal;
+        return animalRepository.findAll();
     }
 }
