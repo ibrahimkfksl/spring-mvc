@@ -21,7 +21,6 @@ public class AnimalServiceImpl implements AnimalService {
 
     private final AnimalRepository animalRepository;
     private final UserService userService;
-    private final RedisTemplate<String, Animal> redisTemplate;
 
     @Override
     @Transactional
