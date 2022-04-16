@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class AnimalController {
@@ -20,15 +22,23 @@ public class AnimalController {
 
     @GetMapping("/showNewAnimalForm")
     public String showNewAnimalForm(Model model){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        boolean isAdmin = userService.isAdmin(user);
         Animal animal = new Animal();
         model.addAttribute("animal", animal);
+        String userType = isAdmin ? "admin": "user";
+        model.addAttribute("role",userType);
         return "new_animal";
     }
 
     @PostMapping("/saveAnimal")
     public String saveAnimal(@ModelAttribute("animal") Animal animal){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        animal.setOwner(userService.getUserByUsername(user.getUsername().toString()));
+        if(animal.getOwner() == null){
+            animal.setOwner(userService.getUserByUsername(user.getUsername().toString()));
+        }else{
+            animal.setOwner(userService.getUserByUsername(animal.getOwner().getEmail()));
+        }
         animalService.saveAnimal(animal);
         return "redirect:/";
     }
