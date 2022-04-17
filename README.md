@@ -26,9 +26,11 @@
 * *[localhost:8082/login](http://localhost:8082/login)* adresinden var olan kullanıcınız ile uygulamaya giriş yapabilirsiniz.
 * *[localhost:8082/registration](http://localhost:8082/registration)* adresinden yeni bir kullanıcı yaratabilirsiniz. 
 > Not: Yaratılan her yeni kullanıcı ROLE_USER rolü ile yaratılır.
-* Sisteme login olduktan sonra *[localhost:8082](http://localhost:8082/)* adresinden size ait olan hayvanları listeleyebilir, yenisini ekleyebilir veyahut güncelleyebilirsiniz.
-* Ek olarak admin olan kullanıcılar sistemde var olan hayvanları silebilirler. Bu erişim yalnızca admin kullanıcısına aittir
+* Sisteme login olduktan sonra *[localhost:8082](http://localhost:8082/)* adresinden size ait olan hayvanları listeleyebilir, yenisini ekleyebilir, arayabilir veyahut güncelleyebilirsiniz.
+* Ek olarak admin olan kullanıcılar sistemde var olan hayvanları silebilirler. Bu erişim yalnızca admin kullanıcısına aittir. Ayrıca admin kullanıcıları user bazlı hayvan eklemesi yapabilir.
 * Admin kullanıcısı yalnızca db üzerinden yaratılabilir. Bunun için users_roles tablosundan var olan kullanıcınızın id'sini 6 numaraları rol id eşleştirmeniz yeterli olacaktır.
+* User rolüne sahip kullanıcılar hayvanların isimlerine göre hayvanlarını aratabilirler
+* Admin rolüne sahip kullanıcılar hayvanların isimlerine ve hayvan sahiplerinin isimlerine göre hayvan araması yapabilir.
 
 ## Database Yönetim Sistemleri için Database Bağlantısı
 
