@@ -30,8 +30,6 @@ class AnimalServiceImplTest {
     @Autowired
     private AnimalService animalService;
 
-    @Sql(scripts = "/animal_service_create.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "/animal_service_delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void give_username_then_return_animals() {
         String username="test-email@hotmail.com";
@@ -45,8 +43,6 @@ class AnimalServiceImplTest {
                 );
     }
 
-    @Sql(scripts = "/animal_service_create.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "/animal_service_delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void give_animalId_then_return_animal_entity() {
         Long animalId = 1L;
@@ -59,8 +55,7 @@ class AnimalServiceImplTest {
         assertThat(animal.getOwner().getId()).isEqualTo(1L);
     }
 
-    @Sql(scripts = "/animal_service_create.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "/animal_service_delete.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+
     @Test
     void find_all_animals() {
         List<Animal> animals = animalService.findAllAnimals();

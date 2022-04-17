@@ -25,14 +25,13 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
-
-    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
         super();
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -74,7 +73,7 @@ public class UserServiceImpl implements UserService {
                 .User(user.getEmail(), user.getPassword(),mapRolesToAuthorities(user.getRoles()));
     }
 
-    private Collection<? extends GrantedAuthority>  mapRolesToAuthorities(Collection<Role> roles){
+    public Collection<? extends GrantedAuthority>  mapRolesToAuthorities(Collection<Role> roles){
         return roles.stream()
                     .map(role -> new SimpleGrantedAuthority(role.getName()))
                     .collect(Collectors.toList());
