@@ -3,31 +3,22 @@ import com.ozguryazilim.springmvc.model.Role;
 import com.ozguryazilim.springmvc.model.User;
 import com.ozguryazilim.springmvc.repository.RoleRepository;
 import com.ozguryazilim.springmvc.repository.UserRepository;
-import com.ozguryazilim.springmvc.service.UserService;
 import com.ozguryazilim.springmvc.web.dto.UserRegistrationDto;
-import com.sun.tools.javac.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
-import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 import org.springframework.security.core.userdetails.*;
+
+import java.util.Arrays;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -48,6 +39,9 @@ class UserServiceImplTest {
 
     @BeforeEach
     public void setup(){
+         Role role = new Role();
+         role.setId(1L);
+         role.setName("TEST_USER");
          given(passwordEncoder.encode(ArgumentMatchers.any(String.class))).willReturn("12345678");
          user = new User();
          user.setId(1L);
@@ -55,7 +49,7 @@ class UserServiceImplTest {
          user.setLastName("test-lastname");
          user.setEmail("test-email@hotmail.com");
          user.setPassword(passwordEncoder.encode("12345678".toString()));
-         user.setRoles(List.of(new Role("TEST_USER")));
+         user.setRoles(Arrays.asList(role));
     }
 
     @Test
@@ -107,7 +101,7 @@ class UserServiceImplTest {
         testUser.setLastName(registrationDto.getLastName());
         testUser.setEmail(registrationDto.getEmail());
         testUser.setPassword(passwordEncoder.encode(registrationDto.getPassword().toString()));
-        testUser.setRoles(List.of(role));
+        testUser.setRoles(Arrays.asList(role));
         given(userRepository.save(ArgumentMatchers.any(User.class))).willReturn(testUser);
         given(roleRepository.findRoleByName("ROLE_USER")).willReturn(role);
 
